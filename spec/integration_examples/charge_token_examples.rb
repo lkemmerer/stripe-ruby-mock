@@ -12,7 +12,7 @@ shared_examples 'Charging with Tokens' do
       @card_token = Stripe::Token.create({
         :customer => @cus.id,
         :source => @cus.sources.first.id
-      }, ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
+      }, 'Stripe-Account' => ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
     end
 
     it "creates with an oauth access token", :oauth => true do
@@ -20,7 +20,7 @@ shared_examples 'Charging with Tokens' do
         :amount => 1099,
         :currency => 'usd',
         :source => @card_token.id
-      }, ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
+      }, 'Stripe-Account' => ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
 
       expect(charge.source.id).to_not eq @cus.sources.first.id
       expect(charge.source.fingerprint).to eq @cus.sources.first.fingerprint
@@ -41,7 +41,7 @@ shared_examples 'Charging with Tokens' do
           :amount => 1099,
           :currency => 'usd',
           :source => @card_token
-        }, ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
+        }, 'Stripe-Account' => ENV['STRIPE_TEST_OAUTH_ACCESS_TOKEN'])
       }.to raise_error(Stripe::InvalidRequestError, /Invalid token id/)
     end
   end

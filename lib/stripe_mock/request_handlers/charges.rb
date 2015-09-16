@@ -39,6 +39,14 @@ module StripeMock
 
         charge = assert_existence :charge, id, charges[id]
 
+        # i have no idea where :source and :refunds are coming from...
+        if params[:source] == {}
+          params.delete(:source)
+        end
+        if params[:refunds] == {:data=>nil}
+          params.delete(:refunds)
+        end
+
         allowed = [:description, :metadata, :receipt_email, :fraud_details]
         disallowed = params.keys - allowed
         if disallowed.count > 0
